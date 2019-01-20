@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>90s Action Actors</title>
+</head>
+
+<body>
+  <button data-actor="Bruce Willis">Bruce Willis</button>
+  <button data-actor="Jean Claude Van Damme">Jean Claude Van Damme</button>
+  <button data-actor="Chuck Norris">Chuck Norris</button>
+  <button data-actor="Arnold Schwarzenegger">Arnold Schwarzenegger</button>
+  <div id="gifs-appear-here">
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    $("button").on("click", function() {
+     
+      var actor = $(this).attr("data-actor");
+
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        actor + "&api_key=IUvxGTYs6mO1tlo7VkMb0Dl9xpEtZlpC&limit=10";
+
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+ 
+        .then(function(response) {
+          console.log(queryURL);
+
+          console.log(response);
+       
+          var results = response.data;
+
+          for (var i = 0; i < results.length; i++) {
+
+            var actorDiv = $("<div>");
+
+            var p = $("<p>").text("Rating: " + results[i].rating);
+           
+            var actorImage = $("<img>");
+     
+            actorImage.attr("src", results[i].images.fixed_height.url);
+
+            actorDiv.append(p);
+            actorDiv.append(actorImage);
+
+            $("#gifs-appear-here").prepend(actorDiv);
+          }
+        });
+
+        $(".gif").on("click", function() {
+    
+      var state = $(this).attr("data-state");
+      if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+      }
+    });
+    });
+  </script>
+</body>
+
+</html>
